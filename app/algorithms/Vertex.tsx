@@ -1,4 +1,4 @@
-import { NodeType } from "./NodeType";
+import { NodeType } from "../types/NodeType";
 
 export class Vertex {
   constructor(
