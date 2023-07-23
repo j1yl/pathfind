@@ -4,7 +4,9 @@ import React, { RefObject, createRef, useState } from "react";
 import { Vertex } from "../algorithms/Vertex";
 import { CoordinatesType } from "../types/CoordinatesType";
 import { NodeType } from "../types/NodeType";
+import Bar from "./Bar";
 import MazeNode from "./Node";
+import { Diykstra, backtrackToStart } from "../algorithms/dijkstra's";
 
 type Props = {
   cols: number;
@@ -12,6 +14,8 @@ type Props = {
 };
 
 const Maze = (props: Props) => {
+  const [selectedAlgo, setSelectedAlgo] = useState<string>("");
+
   const initialStartEnd = (p: Props): CoordinatesType[] => {
     return [
       { x: Math.trunc(p.rows / 2), y: Math.trunc(p.cols / 5) },
@@ -52,28 +56,74 @@ const Maze = (props: Props) => {
 
   const [grid, setGrid] = useState<Vertex[][]>(initialGrid);
 
+  function resetGrid() {
+    refs.forEach((row, x) =>
+      row.forEach((ref, y) => {
+        grid[x][y].reset();
+
+        // ref.current?.classList.remove(classes.visited, classes.shortestPath)
+      })
+    );
+  }
+
+  function visualize() {
+    resetGrid();
+
+    const start = grid[startNode.x][startNode.y];
+    const end = grid[endNode.x][endNode.y];
+
+    const visitedNodes = Diykstra(grid, start, end);
+    const shortestPath = backtrackToStart(end);
+
+    animate(visitedNodes, shortestPath);
+  }
+
+  function animate(visitedNodes: Vertex[], shortestPath: Vertex[]) {
+    for (let i = 1; i < visitedNodes.length - 1; i++) {
+      setTimeout(() => {
+        const node = visitedNodes[i];
+        const ref = refs[node.x][node.y].current!;
+        ref.classList.add({styles.visited});
+      }, 10 * i);
+
+      // if (i === visitedNodes.length - 2) {
+      //   setTimeout(() => {
+      //     animateShortestPath(shortestPath);
+      //   }, 10 * i);
+      //   return;
+      // }
+    }
+  }
+
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${props.cols}, 1fr)`,
-        gridTemplateRows: `repeat(${props.rows}, 1fr)`,
-        gap: "4px",
-        width: "max-content",
-      }}
-    >
-      {refs.map((row, x) =>
-        row.map((node, y) => (
-          <MazeNode
-            x={x}
-            y={y}
-            key={`node-${x}-${y}`}
-            nodeRef={node}
-            vertex={grid[x][y]}
-          />
-        ))
-      )}
-    </div>
+    <>
+      <Bar
+        setSelectedAlgo={setSelectedAlgo}
+        visualize={visualize}
+        clearBoard={resetGrid}
+      />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${props.cols}, 1fr)`,
+          gridTemplateRows: `repeat(${props.rows}, 1fr)`,
+          gap: "4px",
+          width: "max-content",
+        }}
+      >
+        {refs.map((row, x) =>
+          row.map((node, y) => (
+            <MazeNode
+              x={x}
+              y={y}
+              key={`node-${x}-${y}`}
+              nodeRef={node}
+              vertex={grid[x][y]}
+            />
+          ))
+        )}
+      </div>
+    </>
   );
 };
 
