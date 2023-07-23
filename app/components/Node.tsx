@@ -22,7 +22,7 @@ const MazeNode = (props: Props) => {
             ? "#03fc41"
             : props.vertex.nodeType === NodeType.End
             ? "#fa4028"
-            : "transparent",
+            : "",
       }}
       className="rounded-full w-4 h-auto aspect-square border border-neutral-500"
     />

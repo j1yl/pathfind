@@ -7,6 +7,7 @@ import { NodeType } from "../types/NodeType";
 import Bar from "./Bar";
 import MazeNode from "./Node";
 import { Diykstra, backtrackToStart } from "../algorithms/dijkstra's";
+import styles from "../nodestyles.module.css";
 
 type Props = {
   cols: number;
@@ -83,15 +84,26 @@ const Maze = (props: Props) => {
       setTimeout(() => {
         const node = visitedNodes[i];
         const ref = refs[node.x][node.y].current!;
-        ref.classList.add({styles.visited});
+        ref.classList.add(styles.visited);
+        console.log(ref.classList);
       }, 10 * i);
 
-      // if (i === visitedNodes.length - 2) {
-      //   setTimeout(() => {
-      //     animateShortestPath(shortestPath);
-      //   }, 10 * i);
-      //   return;
-      // }
+      if (i === visitedNodes.length - 2) {
+        setTimeout(() => {
+          animateShortestPath(shortestPath);
+        }, 10 * i);
+        return;
+      }
+    }
+  }
+
+  function animateShortestPath(shortestPath: Vertex[]) {
+    for (let i = 1; i < shortestPath.length - 1; i++) {
+      setTimeout(() => {
+        const node = shortestPath[i];
+        const ref = refs[node.x][node.y].current!;
+        ref.classList.add(styles.shortestPath);
+      }, 50 * i);
     }
   }
 
