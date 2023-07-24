@@ -112,8 +112,16 @@ export default function Home() {
         >
           TypeScript
         </Link>
-        .
+        .{" "}
       </div>
+      <Link
+        href="https://github.com/j1yl/pathfind"
+        className="underline"
+        target="_blank"
+        referrerPolicy="no-referrer"
+      >
+        View Source
+      </Link>
     </main>
   );
 }
