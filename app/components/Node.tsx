@@ -1,5 +1,5 @@
 import React, { RefObject } from "react";
-import { Vertex } from "../algorithms/Vertex";
+import { Vertex } from "../classes/Vertex";
 import { NodeType } from "../types/NodeType";
 
 type Props = {
@@ -19,12 +19,12 @@ const MazeNode = (props: Props) => {
       style={{
         backgroundColor:
           props.vertex.nodeType === NodeType.Start
-            ? "#03fc41"
+            ? "#0ec23e"
             : props.vertex.nodeType === NodeType.End
-            ? "#fa4028"
+            ? "#c20e2f"
             : "",
       }}
-      className="rounded-full w-4 h-auto aspect-square border border-neutral-500"
+      className="w-4 border-neutral-600 rounded-full border h-auto aspect-square transition-colors duration-150 ease-in-out"
     />
   );
 };

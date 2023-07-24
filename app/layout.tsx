@@ -2,11 +2,15 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export const metadata: Metadata = {
-  title: "Pathvis",
-  description: "Path visualizer",
+  title: "Path Finding Visualizer",
+  description:
+    "A mobile-responsive visualizer for path finding algorithms made with Next.js, React, Tailwind CSS, DaisyUI, and TypeScript. Built by @j1yl and @davidjsolano on GitHub.",
 };
 
 export default function RootLayout({
@@ -15,9 +19,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="bumblebee">
+    <html lang="en" data-theme="light">
       <body className={inter.className}>
-        <div className="mx-auto max-w-screen-xl min-h-screen items-center justify-center flex flex-col relative p-2">
+        <div className="mx-auto font-medium max-w-screen-xl min-h-screen items-center justify-center flex flex-col relative p-2">
           {children}
         </div>
       </body>

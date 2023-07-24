@@ -15,35 +15,38 @@ type Props = {
 };
 
 const Bar = (props: Props) => {
-  const my_window = window as MyWindow;
-
   return (
-    <div className="w-full flex md:flex-row flex-col gap-2 justify-between my-8">
+    <div className="w-full flex md:flex-row flex-col gap-4 justify-between items-center">
       <select
-        className="select select-bordered w-full max-w-xs"
+        className="select select-primary w-full max-w-xs"
         onChange={(e) => {
           props.setSelectedAlgo(e.target.value);
         }}
+        defaultValue={"default"}
       >
-        <option disabled selected>
-          Pick your algorithm
+        <option disabled value="default">
+          PICK YOUR ALGORITHM
         </option>
-        <option value={"dijkstra"}>Dijkstra&apos;s</option>
+        <option value="dijkstra">DIJKSTRA&apos;S</option>
       </select>
-      <div className="flex gap-2 w-full">
-        <button className="btn" onClick={() => props.visualize()}>
+      <div className="flex gap-2 w-full md:justify-end justify-center">
+        <button className="btn btn-outline" onClick={() => props.visualize()}>
           Visualize
         </button>
-        <button className="btn" onClick={() => props.clearBoard()}>
+        <button className="btn btn-outline" onClick={() => props.clearBoard()}>
           Clear
         </button>
         <div className="w-max">
-          {/* Open the modal using ID.showModal() method */}
           <button
-            className="btn"
-            onClick={() => my_window.my_modal_5?.showModal()}
+            className="btn btn-outline"
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                const myWindow = window as MyWindow;
+                myWindow.my_modal_5?.showModal();
+              }
+            }}
           >
-            help
+            Help
           </button>
           <dialog
             id="my_modal_5"
@@ -52,10 +55,12 @@ const Bar = (props: Props) => {
             <form method="dialog" className="modal-box">
               <h3 className="font-bold text-lg">Hello!</h3>
               <p className="py-4">
-                Press ESC key or click the button below to close
+                Please select an algorithm and click visualize to see the magic.
+              </p>
+              <p className="py-4">
+                Use the clear button to clear the board and start over.
               </p>
               <div className="modal-action">
-                {/* if there is a button in form, it will close the modal */}
                 <button className="btn">Close</button>
               </div>
             </form>

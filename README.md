@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Path Finding Visualizer
+
+## About
+
+A mobile-responsive visualizer for path finding algorithms made with Next.js, React, Tailwind CSS, DaisyUI, and TypeScript. Built by [@j1yl](https://github.com/j1yl) and [@davidjsolano](https://github.com/davidjsolano).
 
 ## Getting Started
 

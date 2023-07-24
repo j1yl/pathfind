@@ -1,8 +1,8 @@
 // Import the Vertex class from the "./Vertex" file
-import { Vertex } from "./Vertex";
+import { Vertex } from "../classes/Vertex";
 
 // Diykstra's algorithm implementation to find the shortest path in a grid-based graph
-export function Diykstra(grid: Vertex[][], startNode: Vertex, endNode: Vertex) {
+export function Dijkstra(grid: Vertex[][], startNode: Vertex, endNode: Vertex) {
   // Initialize the openSet with the startNode and an empty visited array
   const openSet = [startNode];
   const visited: Vertex[] = [];

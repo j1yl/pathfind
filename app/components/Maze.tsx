@@ -1,13 +1,13 @@
 "use client";
 
 import React, { RefObject, createRef, useState } from "react";
-import { Vertex } from "../algorithms/Vertex";
+import { Vertex } from "../classes/Vertex";
+import { Dijkstra, backtrackToStart } from "../algorithms/Dijkstra";
 import { CoordinatesType } from "../types/CoordinatesType";
 import { NodeType } from "../types/NodeType";
 import Bar from "./Bar";
 import MazeNode from "./Node";
-import { Diykstra, backtrackToStart } from "../algorithms/dijkstra's";
-import styles from "../nodestyles.module.css";
+import styles from "../styles/nodestyles.module.css";
 
 type Props = {
   cols: number;
@@ -24,17 +24,6 @@ const Maze = (props: Props) => {
     ];
   };
 
-  const startEnd = initialStartEnd(props);
-
-  const [startNode, setStartNode] = useState<CoordinatesType>(startEnd[0]);
-  const [endNode, setEndNode] = useState<CoordinatesType>(startEnd[1]);
-
-  const initialRefs = Array.from({ length: props.rows }, (_) =>
-    Array.from({ length: props.cols }, (_) => createRef<HTMLDivElement>())
-  );
-
-  const [refs] = useState<RefObject<HTMLDivElement>[][]>(initialRefs);
-
   function initialNodeType(
     x: number,
     y: number,
@@ -48,21 +37,28 @@ const Maze = (props: Props) => {
       : NodeType.Default;
   }
 
+  const startEnd = initialStartEnd(props);
+  const [startNode, setStartNode] = useState<CoordinatesType>(startEnd[0]);
+  const [endNode, setEndNode] = useState<CoordinatesType>(startEnd[1]);
+
+  const initialRefs = Array.from({ length: props.rows }, (_) =>
+    Array.from({ length: props.cols }, (_) => createRef<HTMLDivElement>())
+  );
+  const [refs] = useState<RefObject<HTMLDivElement>[][]>(initialRefs);
+
   const initialGrid = Array.from({ length: props.rows }, (_, x) =>
     Array.from({ length: props.cols }, (_, y) => {
       const nodeType = initialNodeType(x, y, startNode, endNode);
       return new Vertex(x, y, nodeType);
     })
   );
-
   const [grid, setGrid] = useState<Vertex[][]>(initialGrid);
 
   function resetGrid() {
     refs.forEach((row, x) =>
       row.forEach((ref, y) => {
         grid[x][y].reset();
-
-        // ref.current?.classList.remove(classes.visited, classes.shortestPath)
+        ref.current?.classList.remove(styles.visited, styles.shortestPath);
       })
     );
   }
@@ -73,10 +69,11 @@ const Maze = (props: Props) => {
     const start = grid[startNode.x][startNode.y];
     const end = grid[endNode.x][endNode.y];
 
-    const visitedNodes = Diykstra(grid, start, end);
-    const shortestPath = backtrackToStart(end);
-
-    animate(visitedNodes, shortestPath);
+    if (selectedAlgo === "dijkstra") {
+      const visitedNodes = Dijkstra(grid, start, end);
+      const shortestPath = backtrackToStart(end);
+      animate(visitedNodes, shortestPath);
+    }
   }
 
   function animate(visitedNodes: Vertex[], shortestPath: Vertex[]) {
@@ -85,7 +82,6 @@ const Maze = (props: Props) => {
         const node = visitedNodes[i];
         const ref = refs[node.x][node.y].current!;
         ref.classList.add(styles.visited);
-        console.log(ref.classList);
       }, 10 * i);
 
       if (i === visitedNodes.length - 2) {
