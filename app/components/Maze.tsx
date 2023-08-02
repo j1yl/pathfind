@@ -1,12 +1,14 @@
 "use client";
 
 import React, { RefObject, createRef, useState } from "react";
-import { Vertex } from "../classes/Vertex";
-import { Dijkstra, backtrackToStart } from "../algorithms/Dijkstra";
-import { CoordinatesType } from "../types/CoordinatesType";
-import { NodeType } from "../types/NodeType";
 import Bar from "./Bar";
 import MazeNode from "./Node";
+import { backtrackToStart } from "../lib/helpers";
+import { Vertex } from "../classes/Vertex";
+import { Dijkstra } from "../algorithms/Dijkstra";
+import { AStar } from "../algorithms/AStar";
+import { CoordinatesType } from "../types/CoordinatesType";
+import { NodeType } from "../types/NodeType";
 import styles from "../styles/nodestyles.module.css";
 
 type Props = {
@@ -40,6 +42,7 @@ const Maze = (props: Props) => {
   const startEnd = initialStartEnd(props);
   const [startNode, setStartNode] = useState<CoordinatesType>(startEnd[0]);
   const [endNode, setEndNode] = useState<CoordinatesType>(startEnd[1]);
+  const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const initialRefs = Array.from({ length: props.rows }, (_) =>
     Array.from({ length: props.cols }, (_) => createRef<HTMLDivElement>())
@@ -69,14 +72,22 @@ const Maze = (props: Props) => {
     const start = grid[startNode.x][startNode.y];
     const end = grid[endNode.x][endNode.y];
 
-    if (selectedAlgo === "dijkstra") {
-      const visitedNodes = Dijkstra(grid, start, end);
-      const shortestPath = backtrackToStart(end);
-      animate(visitedNodes, shortestPath);
+    switch (selectedAlgo) {
+      case "dijkstra":
+        const dijkstraVisitedNodes = Dijkstra(grid, start, end);
+        const dijkstraShortestPath = backtrackToStart(end);
+        animate(dijkstraVisitedNodes, dijkstraShortestPath);
+        break;
+      case "astar":
+        const astarVisitedNodes = AStar(grid, start, end);
+        const astarShortestPath = backtrackToStart(end);
+        animate(astarVisitedNodes, astarShortestPath);
+        break;
     }
   }
 
   function animate(visitedNodes: Vertex[], shortestPath: Vertex[]) {
+    setIsRunning(true);
     for (let i = 1; i < visitedNodes.length - 1; i++) {
       setTimeout(() => {
         const node = visitedNodes[i];
@@ -87,6 +98,7 @@ const Maze = (props: Props) => {
       if (i === visitedNodes.length - 2) {
         setTimeout(() => {
           animateShortestPath(shortestPath);
+          setIsRunning(false);
         }, 10 * i);
         return;
       }
@@ -106,6 +118,7 @@ const Maze = (props: Props) => {
   return (
     <>
       <Bar
+        isRunning={isRunning}
         setSelectedAlgo={setSelectedAlgo}
         visualize={visualize}
         clearBoard={resetGrid}

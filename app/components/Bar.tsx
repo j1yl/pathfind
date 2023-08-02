@@ -12,6 +12,7 @@ type Props = {
   setSelectedAlgo: (algo: string) => void;
   visualize: () => void;
   clearBoard: () => void;
+  isRunning: boolean;
 };
 
 const Bar = (props: Props) => {
@@ -28,12 +29,19 @@ const Bar = (props: Props) => {
           PICK YOUR ALGORITHM
         </option>
         <option value="dijkstra">DIJKSTRA&apos;S</option>
+        <option value="astar">A*</option>
       </select>
       <div className="flex gap-2 w-full md:justify-end justify-center">
-        <button className="btn btn-outline" onClick={() => props.visualize()}>
+        <button
+          className={`btn btn-outline ${props.isRunning ? "btn-disabled" : ""}`}
+          onClick={() => props.visualize()}
+        >
           Visualize
         </button>
-        <button className="btn btn-outline" onClick={() => props.clearBoard()}>
+        <button
+          className={`btn btn-outline ${props.isRunning ? "btn-disabled" : ""}`}
+          onClick={() => props.clearBoard()}
+        >
           Clear
         </button>
         <div className="w-max">
