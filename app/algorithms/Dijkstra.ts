@@ -69,17 +69,3 @@ export function Dijkstra(grid: Vertex[][], startNode: Vertex, endNode: Vertex) {
     );
   }
 }
-
-// Function to backtrack from the destination node to the start node and return the path
-export function backtrackToStart(node: Vertex) {
-  const path = [node];
-
-  // Backtrack through the previous nodes until reaching the start node
-  while (node.prevNode) {
-    path.unshift(node.prevNode);
-    node = node.prevNode!;
-  }
-
-  // Return the path containing the nodes in the shortest path from startNode to the given node
-  return path;
-}

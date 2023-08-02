@@ -64,14 +64,3 @@ export function AStar(grid: Vertex[][], startNode: Vertex, endNode: Vertex) {
     return Math.abs(node.x - goalNode.x) + Math.abs(node.y - goalNode.y);
   }
 }
-
-export function backtrackToStart(node: Vertex) {
-  const path = [node];
-
-  while (node.prevNode) {
-    path.unshift(node.prevNode);
-    node = node.prevNode!;
-  }
-
-  return path;
-}
