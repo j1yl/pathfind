@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light">
+    <html lang="en" data-theme="lofi">
       <body className={inter.className}>
         <div className="mx-auto font-medium max-w-screen-xl min-h-screen items-center justify-center flex flex-col relative p-2">
           {children}

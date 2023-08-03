@@ -1,7 +1,7 @@
 .visited {
-  background: #879bff;
+  background: var(--visited);
 }
 
 .shortestPath {
-  background: #ffee35;
+  background: var(--shortest);
 }

@@ -13,38 +13,36 @@ export default function Home() {
 
   useEffect(() => {
     if (width === undefined || height === undefined) {
-      // console.log("Device undefined");
+      // DEVICE UNDEFINED
     } else if (width >= 700) {
-      // console.log("Device PC");
+      // DEVICE PC
       setRows(Math.trunc((height / nodeSize) * 0.4));
       setCols(Math.min(Math.trunc((width / nodeSize) * 0.5), 50));
     } else {
-      // console.log("Device SmartPhone");
+      // DEVICE SMARTPHONE
       setRows(Math.trunc((height / nodeSize) * 0.4));
       setCols(Math.trunc((width / nodeSize) * 0.8));
     }
   }, [width, height]);
 
-  // console.log(`[w: ${width}, h: ${height}], [rows: ${rows}, cols: ${cols}]`);
-
   return (
-    <main className="flex flex-col items-center gap-8 md:gap-16">
+    <main className="flex flex-col items-center gap-4 md:gap-8">
       <Maze key={cols} cols={cols} rows={rows} />
       <div className="flex gap-4 flex-wrap justify-center">
         <div className="flex items-center gap-1">
-          <div className="bg-[#0ec23e] h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
+          <div className="bg-start-node h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
           <p>Start</p>
         </div>
         <div className="flex items-center gap-1">
-          <div className="bg-[#c20e2f] h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
+          <div className="bg-end-node h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
           <p>End</p>
         </div>
         <div className="flex items-center gap-1">
-          <div className="bg-[#ffee35] h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
+          <div className="bg-shortest h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
           <p>Shortest Path</p>
         </div>
         <div className="flex items-center gap-1">
-          <div className="bg-[#879bff] h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
+          <div className="bg-visited h-4 w-4 border-neutral-600 rounded-full border aspect-square" />
           <p>Visited Node</p>
         </div>
       </div>

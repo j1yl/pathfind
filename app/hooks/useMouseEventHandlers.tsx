@@ -39,8 +39,6 @@ const useMouseEventHandlers = (
 
   const handleMouseUp = (x: number, y: number) => {
     setIsMousePressed(false);
-    setIsUpdatingToWall(false);
-
     setIsUpdatingToWall(grid[x][y].nodeType !== NodeType.Wall);
   };
 

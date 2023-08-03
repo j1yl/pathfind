@@ -57,6 +57,7 @@ const Maze = (props: Props) => {
     })
   );
   const [grid, setGrid] = useState<Vertex[][]>(initialGrid);
+
   function resetGrid() {
     refs.forEach((row, x) =>
       row.forEach((ref, y) => {
@@ -69,6 +70,7 @@ const Maze = (props: Props) => {
       })
     );
   }
+
   const resetWall = () => {
     refs.forEach((row, i) =>
       row.forEach((ref, j) => {
@@ -80,11 +82,14 @@ const Maze = (props: Props) => {
     const temp = [...grid];
     setGrid(temp);
   };
+
   const reset = () => {
     resetWall();
     resetGrid();
   };
+
   const handlers = useMouseEventHandlers(grid, setGrid);
+
   function visualize() {
     resetGrid();
     const start = grid[startNode.x][startNode.y];
@@ -146,7 +151,6 @@ const Maze = (props: Props) => {
         setSelectedAlgo={setSelectedAlgo}
         visualize={visualize}
         clearBoard={reset}
-        clearWalls={resetWall}
       />
       <div
         style={{
