@@ -13,9 +13,15 @@ module.exports = {
         md: "1060px",
       },
     },
+    colors: {
+      "start-node": "var(--start)",
+      "end-node": "var(--end)",
+      shortest: "var(--shortest)",
+      visited: "var(--visited)",
+    },
   },
   daisyui: {
-    themes: ["light"],
+    themes: ["lofi"],
   },
   plugins: [require("daisyui")],
 };
