@@ -15,26 +15,19 @@ type Props = {
 };
 
 const MazeNode = (props: Props) => {
-  useEffect(() => {
-    props.nodeRef.current!.addEventListener("touchstart", handleTouchStart, {
-      passive: false,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleMouseDown = () => {
-    console.log("mouse down!");
+    // console.log("mouse down");
     props.handleMouseDown(props.x, props.y);
   };
 
   const handleMouseEnter = () => {
+    // console.log("mouse enter");
     props.handleMouseEnter(props.x, props.y);
-    console.log("Mouse Enter");
   };
 
   const handleMouseUp = () => {
+    // console.log("mouse up");
     props.handleMouseUp(props.x, props.y);
-    console.log("Mouse up!");
   };
 
   const handleTouchStart = (e: TouchEvent) => {
@@ -47,9 +40,9 @@ const MazeNode = (props: Props) => {
     const x = touch.pageX - window.scrollX;
     const y = touch.pageY - window.scrollY;
 
-    var elm = document.elementFromPoint(x, y) as HTMLElement;
-    const i = Number(elm.dataset.x);
-    const j = Number(elm.dataset.y);
+    const touchedElement = document.elementFromPoint(x, y) as HTMLElement;
+    const i = Number(touchedElement.dataset.x);
+    const j = Number(touchedElement.dataset.y);
 
     props.handleMouseEnter(i, j);
   };
@@ -57,6 +50,13 @@ const MazeNode = (props: Props) => {
   const handleTouchEnd = (_: React.TouchEvent) => {
     props.handleMouseUp(props.x, props.y);
   };
+
+  useEffect(() => {
+    props.nodeRef.current!.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+  }, [handleTouchStart, props.nodeRef]);
+
   return (
     <div
       ref={props.nodeRef}
@@ -77,7 +77,7 @@ const MazeNode = (props: Props) => {
             : "",
       }}
       className={`w-4 border-neutral-600 rounded-full border h-auto aspect-square transition-colors duration-150 ease-in-out ${
-        props.vertex.isWall() && "bg-black"
+        props.vertex.isWall() && "bg-neutral-900"
       }`}
     />
   );
