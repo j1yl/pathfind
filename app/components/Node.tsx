@@ -1,4 +1,4 @@
-import React, { RefObject } from "react";
+import React, { RefObject, useCallback } from "react";
 import { Vertex } from "../classes/Vertex";
 import { NodeType } from "../types/NodeType";
 import { useEffect } from "react";
@@ -26,14 +26,17 @@ const MazeNode = (props: Props) => {
   };
 
   const handleMouseUp = () => {
-    // console.log("mouse up");
+    // console.log("mouse");
     props.handleMouseUp(props.x, props.y);
   };
 
-  const handleTouchStart = (e: TouchEvent) => {
-    e.preventDefault();
-    props.handleMouseDown(props.x, props.y);
-  };
+  const handleTouchStart = useCallback(
+    (e: TouchEvent) => {
+      e.preventDefault();
+      props.handleMouseDown(props.x, props.y);
+    },
+    [props]
+  );
 
   const handleTouchMove = (e: React.TouchEvent) => {
     const touch = e.changedTouches[0];
