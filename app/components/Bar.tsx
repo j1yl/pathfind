@@ -78,7 +78,8 @@ const Bar = (props: Props) => {
               </p>
               <p>
                 Select your preferred algorithm from the options available. Once
-                you've set up the grid, click the 'Visualize' button to see the
+                you&apos;ve set up the grid, click the{" "}
+                <span className="font-bold">VISUALIZE</span> button to see the
                 magic happen!
               </p>
               <p>
