@@ -12,6 +12,7 @@ type Props = {
   setSelectedAlgo: (algo: string) => void;
   visualize: () => void;
   clearBoard: () => void;
+  clearWalls: () => void;
   isRunning: boolean;
 };
 
@@ -31,20 +32,29 @@ const Bar = (props: Props) => {
         <option value="dijkstra">DIJKSTRA&apos;S</option>
         <option value="astar">A*</option>
       </select>
-      <div className="flex gap-2 w-full md:justify-end justify-center">
+      <div className="flex xs:flex-wrap gap-2 w-full md:justify-end justify-center ">
+        <p className="pt-1 xs:pt-2 font-bold text-center">
+          Click Node to add Walls
+        </p>
         <button
-          className={`btn btn-outline ${props.isRunning ? "btn-disabled" : ""}`}
+          className={` btn btn-outline ${props.isRunning && "btn-disabled"}`}
           onClick={() => props.visualize()}
         >
           Visualize
         </button>
         <button
-          className={`btn btn-outline ${props.isRunning ? "btn-disabled" : ""}`}
+          className={`btn btn-outline ${props.isRunning && "btn-disabled"}`}
           onClick={() => props.clearBoard()}
         >
-          Clear
+          Reset
         </button>
-        <div className="w-max">
+        <button
+          className={` btn btn-outline ${props.isRunning && "btn-disabled"}`}
+          onClick={() => props.clearWalls()}
+        >
+          Clear Walls
+        </button>
+        <div className=" w-max">
           <button
             className="btn btn-outline"
             onClick={() => {

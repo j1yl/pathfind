@@ -6,7 +6,13 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        xs: { raw: "(max-width: 500px)" },
+        sm: "768px",
+        md: "1060px",
+      },
+    },
   },
   daisyui: {
     themes: ["light"],

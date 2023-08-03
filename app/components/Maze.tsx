@@ -4,6 +4,7 @@ import React, { RefObject, createRef, useState } from "react";
 import Bar from "./Bar";
 import MazeNode from "./Node";
 import { backtrackToStart } from "../lib/helpers";
+import useMouseEventHandlers from "../hooks/useMouseEventHandlers";
 import { Vertex } from "../classes/Vertex";
 import { Dijkstra } from "../algorithms/Dijkstra";
 import { AStar } from "../algorithms/AStar";
@@ -39,9 +40,9 @@ const Maze = (props: Props) => {
       : NodeType.Default;
   }
 
-  const startEnd = initialStartEnd(props);
-  const [startNode, setStartNode] = useState<CoordinatesType>(startEnd[0]);
-  const [endNode, setEndNode] = useState<CoordinatesType>(startEnd[1]);
+  const [start, end] = initialStartEnd(props);
+  const [startNode, setStartNode] = useState<CoordinatesType>(start);
+  const [endNode, setEndNode] = useState<CoordinatesType>(end);
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
   const initialRefs = Array.from({ length: props.rows }, (_) =>
@@ -56,19 +57,36 @@ const Maze = (props: Props) => {
     })
   );
   const [grid, setGrid] = useState<Vertex[][]>(initialGrid);
-
   function resetGrid() {
     refs.forEach((row, x) =>
       row.forEach((ref, y) => {
         grid[x][y].reset();
-        ref.current?.classList.remove(styles.visited, styles.shortestPath);
+        ref.current?.classList.remove(
+          styles.visited,
+          styles.shortestPath,
+          styles.wall
+        );
       })
     );
   }
+  const resetWall = () => {
+    refs.forEach((row, i) =>
+      row.forEach((ref, j) => {
+        if (grid[i][j].isStartOrEnd()) return;
 
+        grid[i][j].clearWall();
+      })
+    );
+    const temp = [...grid];
+    setGrid(temp);
+  };
+  const reset = () => {
+    resetWall();
+    resetGrid();
+  };
+  const handlers = useMouseEventHandlers(grid, setGrid);
   function visualize() {
     resetGrid();
-
     const start = grid[startNode.x][startNode.y];
     const end = grid[endNode.x][endNode.y];
 
@@ -76,31 +94,37 @@ const Maze = (props: Props) => {
       case "dijkstra":
         const dijkstraVisitedNodes = Dijkstra(grid, start, end);
         const dijkstraShortestPath = backtrackToStart(end);
-        animate(dijkstraVisitedNodes, dijkstraShortestPath);
+        animate(dijkstraVisitedNodes, dijkstraShortestPath, "dijkstra");
         break;
       case "astar":
         const astarVisitedNodes = AStar(grid, start, end);
         const astarShortestPath = backtrackToStart(end);
-        animate(astarVisitedNodes, astarShortestPath);
+        animate(astarVisitedNodes, astarShortestPath, "astar");
         break;
     }
   }
 
-  function animate(visitedNodes: Vertex[], shortestPath: Vertex[]) {
+  function animate(
+    visitedNodes: Vertex[],
+    shortestPath: Vertex[],
+    name: string
+  ) {
+    const speed = name === "dijkstra" ? 3 : 20;
+    const delay = name === "dijkstra" ? 3 : 20;
     setIsRunning(true);
     for (let i = 1; i < visitedNodes.length - 1; i++) {
       setTimeout(() => {
         const node = visitedNodes[i];
         const ref = refs[node.x][node.y].current!;
         ref.classList.add(styles.visited);
-      }, 10 * i);
+      }, speed * i);
 
       if (i === visitedNodes.length - 2) {
         setTimeout(() => {
           animateShortestPath(shortestPath);
           setIsRunning(false);
-        }, 10 * i);
-        return;
+          return;
+        }, delay * i);
       }
     }
   }
@@ -111,7 +135,7 @@ const Maze = (props: Props) => {
         const node = shortestPath[i];
         const ref = refs[node.x][node.y].current!;
         ref.classList.add(styles.shortestPath);
-      }, 50 * i);
+      }, 40 * i);
     }
   }
 
@@ -121,7 +145,8 @@ const Maze = (props: Props) => {
         isRunning={isRunning}
         setSelectedAlgo={setSelectedAlgo}
         visualize={visualize}
-        clearBoard={resetGrid}
+        clearBoard={reset}
+        clearWalls={resetWall}
       />
       <div
         style={{
@@ -140,6 +165,9 @@ const Maze = (props: Props) => {
               key={`node-${x}-${y}`}
               nodeRef={node}
               vertex={grid[x][y]}
+              handleMouseDown={handlers.handleMouseDown}
+              handleMouseEnter={handlers.handleMouseEnter}
+              handleMouseUp={handlers.handleMouseUp}
             />
           ))
         )}
